@@ -69,11 +69,8 @@ echo "-------------------------------------------------"
 pacstrap /mnt base base-devel linux linux-firmware vim nano sudo --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 
-echo "-------------------------------------------------"
-echo "     Switching root"
-echo "-------------------------------------------------"
-arch-chroot /mnt
-
+# copy to new script to run in arch-root
+printf'#!/usr/bin/env bash
 echo "-------------------------------------------------"
 echo "     Bootloader Systemd Installation"
 echo "-------------------------------------------------"
@@ -102,4 +99,9 @@ umount -R /mnt
 
 echo "-------------------------------------------------"
 echo "     SYSTEM READY FOR FIRST BOOT"
+echo "-------------------------------------------------"' > /mnt/preinstall2.sh
+
 echo "-------------------------------------------------"
+echo "     Switching root"
+echo "-------------------------------------------------"
+arch-chroot /mnt ./preinstall2.sh

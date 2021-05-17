@@ -79,7 +79,7 @@ cat <<EOF > /boot/loader/entries/arch.conf
 title Arch Linux  
 linux /vmlinuz-linux  
 initrd  /initramfs-linux.img  
-options root=${DISK}1 rw
+options root=%s1 rw
 EOF
 
 echo "-------------------------------------------------"
@@ -99,7 +99,7 @@ umount -R /mnt
 
 echo "-------------------------------------------------"
 echo "     SYSTEM READY FOR FIRST BOOT"
-echo "-------------------------------------------------"' > /mnt/preinstall2.sh
+echo "-------------------------------------------------"' ${DISK} > /mnt/preinstall2.sh
 
 chmod a+x /mnt/preinstall2.sh
 

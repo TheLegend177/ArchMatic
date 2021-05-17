@@ -48,7 +48,7 @@ function setup {
     echo "-------------------------------------------------"
     timedatectl set-ntp true
     pacman -S --noconfirm pacman-contrib reflector
-    if [ -f /etc/pacman.d/mirrorlist]; then
+    if [[ -f /etc/pacman.d/mirrorlist]]; then
         mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
     fi
     reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist

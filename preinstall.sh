@@ -79,7 +79,7 @@ cat <<EOF > /boot/loader/entries/arch.conf
 title Arch Linux  
 linux /vmlinuz-linux  
 initrd  /initramfs-linux.img  
-options root=%s1 rw
+options root=%s2 rw
 EOF
 
 echo "-------------------------------------------------"

@@ -31,7 +31,7 @@ function setup {
 
         read -p "Please enter username:" username
 
-        read -ps "Please enter password:" password
+        read -sp "Please enter password:" password
 
         read -sp "Please repeat password:" password2
 
@@ -78,6 +78,14 @@ function setup {
 
     # Add sudo no password rights
     sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+
+    echo "-------------------------------------------------"
+    echo "     Setting up mirrors for optimal download"
+    echo "-------------------------------------------------"
+    timedatectl set-ntp true
+    pacman -S --noconfirm pacman-contrib reflector
+    mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+    reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 }
 
 function baseSetup {
@@ -404,21 +412,21 @@ FONT=ter-v32b' < /etc/vconsole.conf
 }
 
 clear
-echo -n "\nStarting setup ... "
+echo -n "Starting setup ... "
 sleep 5
 clear
 setup
-echo -n "\nStarting base setup ... "
+echo -n "Starting base setup ... "
 sleep 5
 clear
 baseSetup
-echo -n "\nStarting software setup ... "
+echo -n "Starting software setup ... "
 sleep 5
 clear
 softwareSetup
-echo -n "\nStarting post installation setup ... "
+echo -n "Starting post installation setup ... "
 sleep 5
 clear
 postInstallation
 clear
-echo -n "\n\n\nArchMatic finished the installation and configuration of the system!\n\n\n"
+echo -n "ArchMatic finished the installation and configuration of the system!\n\n\n"

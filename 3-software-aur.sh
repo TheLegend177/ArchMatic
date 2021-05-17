@@ -11,7 +11,7 @@ echo -e "\nINSTALLING AUR SOFTWARE\n"
 
 cd "${HOME}"
 
-echo "CLOING: YAY"
+echo "CLONING: YAY"
 git clone "https://aur.archlinux.org/yay.git"
 
 

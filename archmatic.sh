@@ -44,11 +44,14 @@ function setup {
     fi
 
     echo "-------------------------------------------------"
-    echo "Setting up mirrors for optimal download"
+    echo "     Setting up mirrors for optimal download"
     echo "-------------------------------------------------"
-    pacman -S --noconfirm pacman-contrib curl
-    mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    curl -s "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
+    timedatectl set-ntp true
+    pacman -S --noconfirm pacman-contrib reflector
+    if [ -f /etc/pacman.d/mirrorlist]; then
+        mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+    fi
+    reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
     echo "-------------------------------------------------"
     echo "              makepkg configuration              "
@@ -78,14 +81,6 @@ function setup {
 
     # Add sudo no password rights
     sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
-
-    echo "-------------------------------------------------"
-    echo "     Setting up mirrors for optimal download"
-    echo "-------------------------------------------------"
-    timedatectl set-ntp true
-    pacman -S --noconfirm pacman-contrib reflector
-    mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 }
 
 function baseSetup {

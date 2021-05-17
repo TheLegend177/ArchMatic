@@ -70,7 +70,7 @@ pacstrap /mnt base base-devel linux linux-firmware vim nano sudo --noconfirm --n
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # copy to new script to run in arch-root
-printf'#!/usr/bin/env bash
+printf '#!/usr/bin/env bash
 echo "-------------------------------------------------"
 echo "     Bootloader Systemd Installation"
 echo "-------------------------------------------------"

@@ -78,6 +78,11 @@ function setup {
     # Hostname
     hostnamectl --no-ask-password set-hostname $hostname
 
+    # Create User
+    useradd -m $username
+    echo -e $password"\n"$password | passwd --stdin $username
+    usermod --append --groups wheel $username
+
     # Add sudo no password rights
     sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
 }

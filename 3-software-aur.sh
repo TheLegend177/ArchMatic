@@ -21,18 +21,18 @@ PKGS=(
 
     'i3lock-fancy'              # Screen locker
     'synology-drive'            # Synology Drive
-    #'freeoffice'                # Office Alternative
     'libreoffice'               # LibreOffice
     
     # MEDIA ---------------------------------------------------------------
 
     'screenkey'                 # Screencast your keypresses
     'lbry-app-bin'              # LBRY Linux Application
+    'feh'                       # Wallpaper-Bingo
 
     # COMMUNICATIONS ------------------------------------------------------
 
-    #'brave-nightly-bin'         # Brave
     'chromium'                  # Chromium browser
+    'discord'                   # Chat
  
     # THEMES --------------------------------------------------------------
 

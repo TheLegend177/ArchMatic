@@ -8,7 +8,7 @@
 #-------------------------------------------------------------------------
 
 echo "-------------------------------------------------"
-echo "Setting up mirrors for optimal download"
+echo "     Setting up mirrors for optimal download"
 echo "-------------------------------------------------"
 timedatectl set-ntp true
 pacman -S --noconfirm pacman-contrib reflector
@@ -17,19 +17,20 @@ mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
 
-
-echo -e "\nInstalling prereqs...\n$HR"
+echo "-------------------------------------------------"
+echo "     Installing prereqs"
+echo "-------------------------------------------------"
 pacman -S --noconfirm gptfdisk btrfs-progs
 
 echo "-------------------------------------------------"
-echo "-------select your disk to format----------------"
+echo "     Select your disk to format"
 echo "-------------------------------------------------"
 lsblk
 echo "Please enter disk: (example /dev/sda)"
 read DISK
-echo "--------------------------------------"
-echo -e "\nFormatting disk...\n$HR"
-echo "--------------------------------------"
+echo "-------------------------------------------------"
+echo "     Formatting disk"
+echo "-------------------------------------------------"
 
 # disk prep
 sgdisk -Z ${DISK}                   # zap all on disk
@@ -48,7 +49,9 @@ sgdisk -c 1:"UEFISYS" ${DISK}
 sgdisk -c 2:"ROOT" ${DISK}
 
 # make filesystems
-echo -e "\nCreating Filesystems...\n$HR"
+echo "-------------------------------------------------"
+echo "     Creating Filesystems"
+echo "-------------------------------------------------"
 
 mkfs.fat -F32 -n "UEFISYS" "${DISK}1"
 mkfs.ext4 -L "ROOT" "${DISK}2"
@@ -60,16 +63,20 @@ mkdir /mnt/boot
 mkdir /mnt/boot/efi
 mount -t fat "${DISK}1" /mnt/boot/
 
-echo "--------------------------------------"
-echo "-- Arch Install on Main Drive       --"
-echo "--------------------------------------"
+echo "-------------------------------------------------"
+echo "     Arch Install on Main Drive"
+echo "-------------------------------------------------"
 pacstrap /mnt base base-devel linux linux-firmware vim nano sudo --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
+
+echo "-------------------------------------------------"
+echo "     Switching root"
+echo "-------------------------------------------------"
 arch-chroot /mnt
 
-echo "--------------------------------------"
-echo "-- Bootloader Systemd Installation  --"
-echo "--------------------------------------"
+echo "-------------------------------------------------"
+echo "     Bootloader Systemd Installation"
+echo "-------------------------------------------------"
 bootctl install
 cat <<EOF > /boot/loader/entries/arch.conf
 title Arch Linux  
@@ -78,21 +85,21 @@ initrd  /initramfs-linux.img
 options root=${DISK}1 rw
 EOF
 
-echo "--------------------------------------"
-echo "--          Network Setup           --"
-echo "--------------------------------------"
+echo "-------------------------------------------------"
+echo "     Network setup"
+echo "-------------------------------------------------"
 pacman -S networkmanager dhclient --noconfirm --needed
 systemctl enable --now NetworkManager
 
-echo "--------------------------------------"
-echo "--      Set Password for Root       --"
-echo "--------------------------------------"
+echo "-------------------------------------------------"
+echo "     Set Password for Root"
+echo "-------------------------------------------------"
 echo "Enter password for root user: "
 passwd root
 
 exit
 umount -R /mnt
 
-echo "--------------------------------------"
-echo "--   SYSTEM READY FOR FIRST BOOT    --"
-echo "--------------------------------------"
+echo "-------------------------------------------------"
+echo "     SYSTEM READY FOR FIRST BOOT"
+echo "-------------------------------------------------"

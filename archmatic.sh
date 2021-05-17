@@ -18,6 +18,7 @@ if [ ! -f /usr/bin/pacman ]; then
     else
         pacman -Sy && sudo pacman -Syyy && pacman -S lsb-release --noconfirm --needed &>/dev/null
         os=$(lsb_release -ds | sed 's/"//g')
+fi
 
 if [ "${os}" != "Arch Linux" ]; then
     echo "You must be using Arch Linux to execute this script."
@@ -401,6 +402,7 @@ FONT=ter-v32b' < /etc/vconsole.conf
     # Replace in the same state
     cd $pwd
 }
+
 clear
 echo -n "\nStarting setup ... "
 sleep 5

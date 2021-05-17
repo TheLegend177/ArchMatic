@@ -21,7 +21,8 @@ PKGS=(
 
     'i3lock-fancy'              # Screen locker
     'synology-drive'            # Synology Drive
-    'freeoffice'                # Office Alternative
+    #'freeoffice'                # Office Alternative
+    'libreoffice'               # LibreOffice
     
     # MEDIA ---------------------------------------------------------------
 
@@ -30,9 +31,9 @@ PKGS=(
 
     # COMMUNICATIONS ------------------------------------------------------
 
-    'brave-nightly-bin'         # Brave
-    
-
+    #'brave-nightly-bin'         # Brave
+    'chromium'                  # Chromium browser
+ 
     # THEMES --------------------------------------------------------------
 
     'lightdm-webkit-theme-aether'   # Lightdm Login Theme - https://github.com/NoiSek/Aether#installation

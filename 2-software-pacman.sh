@@ -47,8 +47,8 @@ PKGS=(
 
     # DISK UTILITIES ------------------------------------------------------
 
-    'android-tools'         # ADB for Android
-    'android-file-transfer' # Android File Transfer
+    #'android-tools'         # ADB for Android
+    #'android-file-transfer' # Android File Transfer
     'autofs'                # Auto-mounter
     'btrfs-progs'           # BTRFS Support
     'dosfstools'            # DOS Support

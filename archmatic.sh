@@ -43,11 +43,11 @@ function setup {
     fi
 
     echo "-------------------------------------------------"
-    echo "Setting up mirrors for optimal download - US Only"
+    echo "Setting up mirrors for optimal download"
     echo "-------------------------------------------------"
     pacman -S --noconfirm pacman-contrib curl
     mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    curl -s "https://www.archlinux.org/mirrorlist/?country=US&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
+    curl -s "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
 
     echo "-------------------------------------------------"
     echo "              makepkg configuration              "
@@ -61,16 +61,16 @@ function setup {
     sudo sed -i 's/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g' /etc/makepkg.conf
 
     echo "-------------------------------------------------"
-    echo "       Setup Language to US and set locale       "
+    echo "       Setup Language to DE and set locale       "
     echo "-------------------------------------------------"
-    sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+    sed -i 's/^#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
     locale-gen
-    timedatectl --no-ask-password set-timezone America/Chicago
+    timedatectl --no-ask-password set-timezone Europe/Berlin
     timedatectl --no-ask-password set-ntp 1
-    localectl --no-ask-password set-locale LANG="en_US.UTF-8" LC_COLLATE="" LC_TIME="en_US.UTF-8"
+    localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LC_COLLATE="" LC_TIME="de_DE.UTF-8"
 
     # Set keymaps
-    localectl --no-ask-password set-keymap us
+    localectl --no-ask-password set-keymap de
 
     # Hostname
     hostnamectl --no-ask-password set-hostname $hostname
@@ -181,8 +181,8 @@ function softwareSetup {
 
         # DISK UTILITIES ------------------------------------------------------
 
-        'android-tools'         # ADB for Android
-        'android-file-transfer' # Android File Transfer
+        #'android-tools'         # ADB for Android
+        #'android-file-transfer' # Android File Transfer
         'autofs'                # Auto-mounter
         'btrfs-progs'           # BTRFS Support
         'dosfstools'            # DOS Support
@@ -250,7 +250,8 @@ function softwareSetup {
 
     'i3lock-fancy'              # Screen locker
     'synology-drive'            # Synology Drive
-    'freeoffice'                # Office Alternative
+    #'freeoffice'                # Office Alternative
+    'libreoffice'               # LibreOffice
     
     # MEDIA ---------------------------------------------------------------
 
@@ -259,14 +260,15 @@ function softwareSetup {
 
     # COMMUNICATIONS ------------------------------------------------------
 
-    'brave-nightly-bin'         # Brave
-    
+    #'brave-nightly-bin'         # Brave
+    'chromium'                  # Chromium browser
 
     # THEMES --------------------------------------------------------------
 
     'lightdm-webkit-theme-aether'   # Lightdm Login Theme - https://github.com/NoiSek/Aether#installation
     'materia-gtk-theme'             # Desktop Theme
     'papirus-icon-theme'            # Desktop Icons
+    'capitaine-cursors'             # Cursor Themes
     )
 
     for PAC in "${PACMANPKGS[@]}"; do
@@ -330,7 +332,7 @@ fi' > ${HOME}/.xinitrc
     echo
     echo "Configuring vconsole.conf to set a larger font for login shell"
 
-    printf 'KEYMAP=us
+    printf 'KEYMAP=de
 FONT=ter-v32b' < /etc/vconsole.conf
 
     # ------------------------------------------------------------------------

@@ -50,7 +50,7 @@ sgdisk -c 2:"ROOT" ${DISK}
 # make filesystems
 echo -e "\nCreating Filesystems...\n$HR"
 
-mkfs.vfat -F32 -n "UEFISYS" "${DISK}1"
+mkfs.fat -F32 -n "UEFISYS" "${DISK}1"
 mkfs.ext4 -L "ROOT" "${DISK}2"
 
 # mount target
@@ -58,7 +58,7 @@ mkdir /mnt
 mount -t ext4 "${DISK}2" /mnt
 mkdir /mnt/boot
 mkdir /mnt/boot/efi
-mount -t vfat "${DISK}1" /mnt/boot/
+mount -t fat "${DISK}1" /mnt/boot/
 
 echo "--------------------------------------"
 echo "-- Arch Install on Main Drive       --"

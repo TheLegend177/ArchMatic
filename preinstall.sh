@@ -114,7 +114,7 @@ if [ ! -f install.conf ]; then
 else
     source install.conf
 fi
-pw = $(perl -e \'print crypt($ARGV[0], "password")\' $password)
+pw = $(perl -e '\'''print crypt($ARGV[0], "password")'\'' $password)
 useradd -m -p $pw $username
 usermod --append --groups wheel $username
 

@@ -21,13 +21,13 @@ PKGS=(
 
     'i3lock-fancy'              # Screen locker
     'synology-drive'            # Synology Drive
-    'libreoffice'               # LibreOffice
+    'onlyoffice'                # Office Suite
     
     # MEDIA ---------------------------------------------------------------
 
     'screenkey'                 # Screencast your keypresses
     'lbry-app-bin'              # LBRY Linux Application
-    'feh'                       # Wallpaper-Bingo
+    'feh'                       # Wallpaper changer
 
     # COMMUNICATIONS ------------------------------------------------------
 
@@ -40,6 +40,7 @@ PKGS=(
     'materia-gtk-theme'             # Desktop Theme
     'papirus-icon-theme'            # Desktop Icons
     'capitaine-cursors'             # Cursor Themes
+
 )
 
 

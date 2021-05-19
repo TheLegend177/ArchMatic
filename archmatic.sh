@@ -217,7 +217,7 @@ function softwareSetup {
         'smartmontools'         # Disk Monitoring
         'smbclient'             # SMB Connection 
         'xfsprogs'              # XFS Support
-        'krusader'              # Total Commander Ersatz
+        'krusader'              # Total Commander like 2-panel file manager
 
         # GENERAL UTILITIES ---------------------------------------------------
 
@@ -258,7 +258,7 @@ function softwareSetup {
         'gcolor2'               # Colorpicker
         'gimp'                  # GNU Image Manipulation Program
         'ristretto'             # Multi image viewer
-        'krita'                 # Bildbearbeitung
+        'krita'                 # Image processing
 
         # PRODUCTIVITY --------------------------------------------------------
 
@@ -274,17 +274,18 @@ function softwareSetup {
 
         'i3lock-fancy'              # Screen locker
         'synology-drive'            # Synology Drive
-        'libreoffice'               # LibreOffice
+        'onlyoffice'                # Office Suite
         
         # MEDIA ---------------------------------------------------------------
 
         'screenkey'                 # Screencast your keypresses
         'lbry-app-bin'              # LBRY Linux Application
+        'feh'                       # Wallpaper changer
 
         # COMMUNICATIONS ------------------------------------------------------
 
-        #'brave-nightly-bin'         # Brave
         'chromium'                  # Chromium browser
+        'discord'                   # Chat
 
         # THEMES --------------------------------------------------------------
 
@@ -358,7 +359,6 @@ fi' > ${HOME}/.xinitrc
     echo "-------------------------------------------------"
     
     cd .config
-    mkdir awesome
     git clone https://github.com/gramms/awesome.git
     cd ~
 
@@ -489,3 +489,4 @@ clear
 postInstallation
 clear
 echo -n "ArchMatic finished the installation and configuration of the system!"
+reboot

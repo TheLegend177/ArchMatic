@@ -27,7 +27,7 @@ if ! source install.conf; then
 fi
 
 echo "-------------------------------------------------"
-echo "Setting up mirrors for optimal download"
+echo "     Setting up mirrors for optimal download"
 echo "-------------------------------------------------"
 pacman -S --noconfirm pacman-contrib reflector
 if [ -f /etc/pacman.d/mirrorlist ]; then
@@ -35,6 +35,9 @@ if [ -f /etc/pacman.d/mirrorlist ]; then
 fi
 reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
+echo "-------------------------------------------------"
+echo "     makepkg configuration"
+echo "-------------------------------------------------"
 nc=$(grep -c ^processor /proc/cpuinfo)
 echo "You have " $nc" cores."
 echo "-------------------------------------------------"
@@ -59,6 +62,9 @@ localectl --no-ask-password set-keymap de
 hostnamectl --no-ask-password set-hostname $hostname
 
 # Create User
+echo "-------------------------------------------------"
+echo "     Create User"
+echo "-------------------------------------------------"
 useradd -m $username
 echo -e $password"\n"$password | passwd --stdin $username
 usermod --append --groups wheel $username

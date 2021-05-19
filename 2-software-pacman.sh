@@ -63,6 +63,7 @@ PKGS=(
     'smartmontools'         # Disk Monitoring
     'smbclient'             # SMB Connection 
     'xfsprogs'              # XFS Support
+    'krusader'              # Total Commander like 2-panel file manager
 
     # GENERAL UTILITIES ---------------------------------------------------
 
@@ -95,12 +96,15 @@ PKGS=(
     'kdenlive'              # Movie Render
     'obs-studio'            # Record your screen
     'celluloid'             # Video player
+    'musescore'             # Scoring
+    'spotify'               # Streaming
     
     # GRAPHICS AND DESIGN -------------------------------------------------
 
     'gcolor2'               # Colorpicker
     'gimp'                  # GNU Image Manipulation Program
     'ristretto'             # Multi image viewer
+    'krita'                 # Image processing
 
     # PRODUCTIVITY --------------------------------------------------------
 

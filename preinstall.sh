@@ -97,6 +97,18 @@ echo "Enter password for root user: "
 passwd root
 
 echo "-------------------------------------------------"
+echo "     Setup Language to DE and set locale"
+echo "-------------------------------------------------"
+sed -i '\''s/^#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/'\'' /etc/locale.gen
+locale-gen
+timedatectl --no-ask-password set-timezone Europe/Berlin
+timedatectl --no-ask-password set-ntp 1
+localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LC_COLLATE="de_DE.UTF-8" LC_TIME="de_DE.UTF-8"
+
+# Set keymaps
+localectl --no-ask-password set-keymap de
+
+echo "-------------------------------------------------"
 echo "     Create User"
 echo "-------------------------------------------------"
 if [ ! -f install.conf ]; then

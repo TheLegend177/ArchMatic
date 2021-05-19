@@ -26,13 +26,10 @@ if [ "${os}" != "Arch Linux" ]; then
 fi
 
 function setup {
-    if ! source install.conf; then
+    if [ ! -f install.conf ]; then
         read -p "Please enter hostname:" hostname
-
         read -p "Please enter username:" username
-
         read -sp "Please enter password:" password
-
         read -sp "Please repeat password:" password2
 
         # Check if both passwords match
@@ -40,8 +37,24 @@ function setup {
             echo "Passwords do not match"
             exit 1
         fi
-    printf "hostname=$hostname\nusername=${username}\npassword=${password}" > "install.conf"
+        printf "hostname=$hostname\nusername=${username}\npassword=${password}" > "install.conf"
+    else
+        source install.conf
     fi
+
+    # if ! source install.conf; then
+    #     read -p "Please enter hostname:" hostname
+    #     read -p "Please enter username:" username
+    #     read -sp "Please enter password:" password
+    #     read -sp "Please repeat password:" password2
+
+    #     # Check if both passwords match
+    #     if [ "$password" != "$password2" ]; then
+    #         echo "Passwords do not match"
+    #         exit 1
+    #     fi
+    #     printf "hostname=$hostname\nusername=${username}\npassword=${password}" > "install.conf"
+    # fi
 
     echo "-------------------------------------------------"
     echo "     Setting up mirrors for optimal download"

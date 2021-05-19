@@ -95,8 +95,8 @@ function setup {
     echo "-------------------------------------------------"
     echo "     Create User"
     echo "-------------------------------------------------"
-    useradd -m $username
-    echo -e $password"\n"$password | passwd --stdin $username
+    pw = $(perl -e 'print crypt($ARGV[0], "password")' $password)
+    useradd -m -p $pw $username
     usermod --append --groups wheel $username
 
     # Add sudo no password rights

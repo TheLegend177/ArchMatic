@@ -22,6 +22,7 @@ pacman -S wget curl git
 ```
 
 This step installs arch to your hard drive. *IT WILL FORMAT THE DISK*
+It also prompts you for a root password.
 
 ```bash
 wget https://raw.githubusercontent.com/gramms/ArchMatic/master/preinstall.sh
@@ -36,11 +37,13 @@ After rebooting from your hard drive, the system can be installed. You will be p
 2. Desired Username
 3. Password
 
+Login as root with the password you provided in the Pre-Install
+
 ```bash
-pacman -S --no-confirm pacman-contrib curl git
-git clone https://github.com/gramms/ArchMatic
+pacman -S --noconfirm pacman-contrib curl git
+git clone https://github.com/gramms/ArchMatic.git
 cd ArchMatic
-./archmatic.sh
+sh ./archmatic.sh
 ```
 
 ### This script installs the base system and a couple of applications. Feel free to clone this script and edit it to your needs.

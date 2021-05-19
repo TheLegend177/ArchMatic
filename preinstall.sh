@@ -109,3 +109,4 @@ echo "-------------------------------------------------"
 echo "     Switching root"
 echo "-------------------------------------------------"
 arch-chroot /mnt ./preinstall2.sh
+rm preinstall2.sh

@@ -53,7 +53,7 @@ function setup {
     reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
     echo "-------------------------------------------------"
-    echo "              makepkg configuration              "
+    echo "     makepkg configuration"
     echo "-------------------------------------------------"
     nc=$(grep -c ^processor /proc/cpuinfo)
     echo "You have "$nc" cores."
@@ -64,7 +64,7 @@ function setup {
     sudo sed -i 's/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g' /etc/makepkg.conf
 
     echo "-------------------------------------------------"
-    echo "       Setup Language to DE and set locale       "
+    echo "     Setup Language to DE and set locale"
     echo "-------------------------------------------------"
     sed -i 's/^#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
     locale-gen
@@ -79,12 +79,18 @@ function setup {
     hostnamectl --no-ask-password set-hostname $hostname
 
     # Create User
+    echo "-------------------------------------------------"
+    echo "     Create User"
+    echo "-------------------------------------------------"
     useradd -m $username
     echo -e $password"\n"$password | passwd --stdin $username
     usermod --append --groups wheel $username
 
     # Add sudo no password rights
     sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+
+    # Switch context to User
+    su $username
 }
 
 function baseSetup {
@@ -146,7 +152,13 @@ function baseSetup {
     )
 
     for PKG in "${PKGS[@]}"; do
+        echo "-------------------------------------------------"
+        echo "     Installing package "$PKG
+        echo "-------------------------------------------------"
         sudo pacman -S "$PKG" --noconfirm --needed
+        echo "-------------------------------------------------"
+        echo "     Installation of package "$PKG" done."
+        echo "-------------------------------------------------"
     done
 }
 
@@ -205,6 +217,7 @@ function softwareSetup {
         'smartmontools'         # Disk Monitoring
         'smbclient'             # SMB Connection 
         'xfsprogs'              # XFS Support
+        'krusader'              # Total Commander Ersatz
 
         # GENERAL UTILITIES ---------------------------------------------------
 
@@ -237,12 +250,15 @@ function softwareSetup {
         'kdenlive'              # Movie Render
         'obs-studio'            # Record your screen
         'celluloid'             # Video player
+        'musescore'             # Scoring
+        'spotify'               # Streaming
         
         # GRAPHICS AND DESIGN -------------------------------------------------
 
         'gcolor2'               # Colorpicker
         'gimp'                  # GNU Image Manipulation Program
         'ristretto'             # Multi image viewer
+        'krita'                 # Bildbearbeitung
 
         # PRODUCTIVITY --------------------------------------------------------
 
@@ -254,40 +270,58 @@ function softwareSetup {
 
     AURPKGS=(
 
-    # UTILITIES -----------------------------------------------------------
+        # UTILITIES -----------------------------------------------------------
 
-    'i3lock-fancy'              # Screen locker
-    'synology-drive'            # Synology Drive
-    #'freeoffice'                # Office Alternative
-    'libreoffice'               # LibreOffice
+        'i3lock-fancy'              # Screen locker
+        'synology-drive'            # Synology Drive
+        'libreoffice'               # LibreOffice
+        
+        # MEDIA ---------------------------------------------------------------
+
+        'screenkey'                 # Screencast your keypresses
+        'lbry-app-bin'              # LBRY Linux Application
+
+        # COMMUNICATIONS ------------------------------------------------------
+
+        #'brave-nightly-bin'         # Brave
+        'chromium'                  # Chromium browser
+
+        # THEMES --------------------------------------------------------------
+
+        'lightdm-webkit-theme-aether'   # Lightdm Login Theme - https://github.com/NoiSek/Aether#installation
+        'materia-gtk-theme'             # Desktop Theme
+        'papirus-icon-theme'            # Desktop Icons
+        'capitaine-cursors'             # Cursor Themes
     
-    # MEDIA ---------------------------------------------------------------
-
-    'screenkey'                 # Screencast your keypresses
-    'lbry-app-bin'              # LBRY Linux Application
-
-    # COMMUNICATIONS ------------------------------------------------------
-
-    #'brave-nightly-bin'         # Brave
-    'chromium'                  # Chromium browser
-
-    # THEMES --------------------------------------------------------------
-
-    'lightdm-webkit-theme-aether'   # Lightdm Login Theme - https://github.com/NoiSek/Aether#installation
-    'materia-gtk-theme'             # Desktop Theme
-    'papirus-icon-theme'            # Desktop Icons
-    'capitaine-cursors'             # Cursor Themes
     )
 
     for PAC in "${PACMANPKGS[@]}"; do
+        echo "-------------------------------------------------"
+        echo "     Installing package "$PAC
+        echo "-------------------------------------------------"
         sudo pacman -S "$PAC" --noconfirm --needed
+        echo "-------------------------------------------------"
+        echo "     Installation of package "$PAC" done."
+        echo "-------------------------------------------------"
     done
 
     # Clone yay repository and install it
-    cd ${HOME} && git clone "https://aur.archlinux.org/yay.git" && cd ${HOME}/yay && makepkg -si
+    echo "-------------------------------------------------"
+    echo "     Installing yay"
+    echo "-------------------------------------------------"
+    cd ${HOME}
+    git clone "https://aur.archlinux.org/yay.git"
+    cd ${HOME}/yay
+    makepkg -si
 
     for AUR in "${AURPKGS[@]}"; do
+        echo "-------------------------------------------------"
+        echo "     Installing package "$AUR
+        echo "-------------------------------------------------"
         sudo pacman -S "$AUR" --noconfirm --needed
+        echo "-------------------------------------------------"
+        echo "     Installation of package "$AUR" done."
+        echo "-------------------------------------------------"
     done
 }
 
@@ -319,16 +353,30 @@ fi' > ${HOME}/.xinitrc
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Updating /bin/startx to use the correct path"
+    echo "-------------------------------------------------"
+    echo "     Cloning awesome configuration"
+    echo "-------------------------------------------------"
+    
+    cd .config
+    mkdir awesome
+    git clone https://github.com/gramms/awesome.git
+    cd ~
+
+    # ------------------------------------------------------------------------
+
+    echo "-------------------------------------------------"
+    echo "     Updating /bin/startx to use the correct path"
+    echo "-------------------------------------------------"
 
     # By default, startx incorrectly looks for the .serverauth file in our HOME folder.
     sudo sed -i 's|xserverauthfile=\$HOME/.serverauth.\$\$|xserverauthfile=\$XAUTHORITY|g' /bin/startx
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Configuring LTS Kernel as a secondary boot option"
+    echo "-------------------------------------------------"
+    echo "     Configuring LTS Kernel as a"
+    echo "     secondary boot option"
+    echo "-------------------------------------------------"
 
     sudo cp /boot/loader/entries/arch.conf /boot/loader/entries/arch-lts.conf
     sudo sed -i 's|Arch Linux|Arch Linux LTS Kernel|g' /boot/loader/entries/arch-lts.conf
@@ -337,16 +385,19 @@ fi' > ${HOME}/.xinitrc
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Configuring vconsole.conf to set a larger font for login shell"
+    echo "-------------------------------------------------"
+    echo "     Configuring vconsole.conf to set a"
+    echo "     larger font for login shell"
+    echo "-------------------------------------------------"
 
     printf 'KEYMAP=de
 FONT=ter-v32b' > /etc/vconsole.conf
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Disabling buggy cursor inheritance"
+    echo "-------------------------------------------------"
+    echo "     Disabling buggy cursor inheritance"
+    echo "-------------------------------------------------"
 
     # When you boot with multiple monitors the cursor can look huge. This fixes it.
     printf '[Icon Theme]
@@ -354,16 +405,18 @@ FONT=ter-v32b' > /etc/vconsole.conf
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Increasing file watcher count"
+    echo "-------------------------------------------------"
+    echo "     Increasing file watcher count"
+    echo "-------------------------------------------------"
 
     # This prevents a "too many files" error in Visual Studio Code
     echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sudo sysctl --system
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Disabling Pulse .esd_auth module"
+    echo "-------------------------------------------------"
+    echo "     Disabling Pulse .esd_auth module"
+    echo "-------------------------------------------------"
 
     # Pulse audio loads the `esound-protocol` module, which best I can tell is rarely needed.
     # That module creates a file called `.esd_auth` in the home directory which I'd prefer to not be there. So...
@@ -371,27 +424,34 @@ FONT=ter-v32b' > /etc/vconsole.conf
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Enabling Login Display Manager"
+    echo "-------------------------------------------------"
+    echo "     Enabling Login Display Manager"
+    echo "-------------------------------------------------"
 
     sudo systemctl enable --now lightdm.service
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Enabling bluetooth daemon and setting it to auto-start"
+    echo "-------------------------------------------------"
+    echo "     Enabling bluetooth daemon and"
+    echo "     setting it to auto-start"
+    echo "-------------------------------------------------"
 
     sudo sed -i 's|#AutoEnable=false|AutoEnable=true|g' /etc/bluetooth/main.conf
     sudo systemctl enable --now bluetooth.service
 
     # ------------------------------------------------------------------------
 
-    echo
-    echo "Enabling the cups service daemon so we can print"
+    echo "-------------------------------------------------"
+    echo "     Enabling the cups service daemon "
+    echo "     so we can print"
+    echo "-------------------------------------------------"
 
     systemctl enable --now org.cups.cupsd.service
 
-    echo "Configuring NTP, DHCP and NetworkManager services"
+    echo "-------------------------------------------------"
+    echo "     Configuring NTP, DHCP and NetworkManager"
+    echo "-------------------------------------------------"
     sudo ntpd -qg && sudo systemctl enable --now ntpd && sudo systemctl disable dhcpcd && sudo systemctl stop dhcpcd && sudo systemctl enable --now NetworkManager
 
     # Remove no password sudo rights
@@ -428,4 +488,4 @@ sleep 5
 clear
 postInstallation
 clear
-echo -n "ArchMatic finished the installation and configuration of the system!\n\n\n"
+echo -n "ArchMatic finished the installation and configuration of the system!"

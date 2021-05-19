@@ -26,21 +26,21 @@ if [ "${os}" != "Arch Linux" ]; then
 fi
 
 function setup {
-    if [ ! -f install.conf ]; then
-        read -p "Please enter hostname:" hostname
-        read -p "Please enter username:" username
-        read -sp "Please enter password:" password
-        read -sp "Please repeat password:" password2
+    # if [ ! -f install.conf ]; then
+    #     read -p "Please enter hostname:" hostname
+    #     read -p "Please enter username:" username
+    #     read -sp "Please enter password:" password
+    #     read -sp "Please repeat password:" password2
 
-        # Check if both passwords match
-        if [ "$password" != "$password2" ]; then
-            echo "Passwords do not match"
-            exit 1
-        fi
-        printf "hostname=$hostname\nusername=${username}\npassword=${password}" > "install.conf"
-    else
-        source install.conf
-    fi
+    #     # Check if both passwords match
+    #     if [ "$password" != "$password2" ]; then
+    #         echo "Passwords do not match"
+    #         exit 1
+    #     fi
+    #     printf "hostname=$hostname\nusername=${username}\npassword=${password}" > "install.conf"
+    # else
+    #     source install.conf
+    # fi
 
     # if ! source install.conf; then
     #     read -p "Please enter hostname:" hostname
@@ -92,12 +92,12 @@ function setup {
     hostnamectl --no-ask-password set-hostname $hostname
 
     # Create User
-    echo "-------------------------------------------------"
-    echo "     Create User"
-    echo "-------------------------------------------------"
-    pw = $(perl -e 'print crypt($ARGV[0], "password")' $password)
-    useradd -m -p $pw $username
-    usermod --append --groups wheel $username
+    # echo "-------------------------------------------------"
+    # echo "     Create User"
+    # echo "-------------------------------------------------"
+    # pw = $(perl -e 'print crypt($ARGV[0], "password")' $password)
+    # useradd -m -p $pw $username
+    # usermod --append --groups wheel $username
 
     # Add sudo no password rights
     sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers

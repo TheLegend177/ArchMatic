@@ -96,6 +96,28 @@ echo "-------------------------------------------------"
 echo "Enter password for root user: "
 passwd root
 
+echo "-------------------------------------------------"
+echo "     Create User"
+echo "-------------------------------------------------"
+if [ ! -f install.conf ]; then
+    read -p "Please enter hostname:" hostname
+    read -p "Please enter username:" username
+    read -sp "Please enter password:" password
+    read -sp "Please repeat password:" password2
+
+    # Check if both passwords match
+    if [ "$password" != "$password2" ]; then
+        echo "Passwords do not match"
+        exit 1
+    fi
+    printf "hostname=$hostname\nusername=${username}\npassword=${password}" > "install.conf"
+else
+    source install.conf
+fi
+pw = $(perl -e \'print crypt($ARGV[0], "password")\' $password)
+useradd -m -p $pw $username
+usermod --append --groups wheel $username
+
 exit
 umount -R /mnt
 

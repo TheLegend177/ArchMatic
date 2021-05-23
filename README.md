@@ -22,7 +22,7 @@ pacman -S wget curl git
 ```
 
 This step installs arch to your hard drive. *IT WILL FORMAT THE DISK*
-It also prompts you for a root password.
+It prompts you for a root password, a user name and a password for that user.
 
 ```bash
 wget https://raw.githubusercontent.com/gramms/ArchMatic/master/preinstall.sh
@@ -32,15 +32,10 @@ reboot
 
 ### Arch Linux First Boot
 
-After rebooting from your hard drive, the system can be installed. You will be prompted for at least the following things:
-1. Hostname of your machine
-2. Desired Username
-3. Password
-
-Login as root with the password you provided in the Pre-Install
+After rebooting from your hard drive, the system can be installed. Please login with the user you just created. Execute the code below to start the main installation script.
 
 ```bash
-pacman -S --noconfirm pacman-contrib curl git
+sudo pacman -S --noconfirm pacman-contrib curl git
 git clone https://github.com/gramms/ArchMatic.git
 cd ArchMatic
 sh ./archmatic.sh

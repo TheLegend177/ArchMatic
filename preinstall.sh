@@ -109,9 +109,13 @@ localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LC_COLLATE="de_DE.UTF-
 localectl --no-ask-password set-keymap de
 
 echo "-------------------------------------------------"
-echo "     Create User"
+echo "     Select a hostname for this machine"
 echo "-------------------------------------------------"
 read -p "Please enter hostname:" hostname
+
+echo "-------------------------------------------------"
+echo "     Create User"
+echo "-------------------------------------------------"
 read -p "Please enter username:" username
 
 useradd -m $username

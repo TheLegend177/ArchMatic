@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
 
-
 echo "-------------------------------------------------"
-echo "     Set time zone"
+echo "     Setup Language and set locale"
 echo "-------------------------------------------------"
 ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
-
-echo "-------------------------------------------------"
-echo "     Setup Language to DE and set locale"
-echo "-------------------------------------------------"
 sed -i 's/^#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 timedatectl --no-ask-password set-timezone Europe/Berlin
@@ -38,7 +33,7 @@ cat <<EOF > /boot/loader/entries/arch.conf
 title Arch Linux  
 linux /vmlinuz-linux  
 initrd  /initramfs-linux.img  
-options root=$1 rw
+options root="LABEL=ROOT" rw
 EOF
 
 echo "-------------------------------------------------"

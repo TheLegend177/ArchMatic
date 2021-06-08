@@ -38,7 +38,7 @@ sgdisk -Z ${DISK}                   # zap all on disk
 sgdisk -a 2048 -o ${DISK}           # new gpt disk 2048 alignment
 
 # create partitions
-sgdisk -n 1:0:+512M ${DISK}        # partition 1 (UEFI SYS), default start block, 512MB
+sgdisk -n 1:0:+1024M ${DISK}        # partition 1 (UEFI SYS), default start block, 512MB
 sgdisk -n 2:0:0 ${DISK}             # partition 2 (Root), default start, remaining
 
 # set partition types

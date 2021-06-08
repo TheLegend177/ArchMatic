@@ -290,6 +290,7 @@ fi' > ${HOME}/.xinitrc
     echo "     Cloning awesome configuration"
     echo "-------------------------------------------------"
     
+    cd ${HOME}
     if [ ! -d "${HOME}/.config" ]; then
         mkdir .config
     fi
@@ -372,8 +373,8 @@ fi' > ${HOME}/.xinitrc
     echo "     setting it to auto-start"
     echo "-------------------------------------------------"
 
-    sudo sed -i 's|#AutoEnable=false|AutoEnable=true|g' /etc/bluetooth/main.conf
-    sudo systemctl enable --now bluetooth.service
+    #sudo sed -i 's|#AutoEnable=false|AutoEnable=true|g' /etc/bluetooth/main.conf
+    #sudo systemctl enable --now bluetooth.service
 
     # ------------------------------------------------------------------------
 
@@ -382,7 +383,7 @@ fi' > ${HOME}/.xinitrc
     echo "     so we can print"
     echo "-------------------------------------------------"
 
-    systemctl enable --now org.cups.cupsd.service
+    #systemctl enable --now org.cups.cupsd.service
 
     echo "-------------------------------------------------"
     echo "     Configuring NTP, DHCP and NetworkManager"

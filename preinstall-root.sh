@@ -44,10 +44,10 @@ echo "     Create User"
 echo "-------------------------------------------------"
 read -p "Please enter username:" username
 
-useradd -m $username
+useradd -m -G wheel -s /bin/bash $username
 passwd $username
 
-usermod --append --groups wheel $username
+#usermod --append --groups wheel $username
 
 exit
 umount -R /mnt

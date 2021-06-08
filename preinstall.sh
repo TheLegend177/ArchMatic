@@ -80,3 +80,5 @@ echo "-------------------------------------------------"
 echo "     Switching root"
 echo "-------------------------------------------------"
 arch-chroot /mnt ./preinstall-root.sh
+
+sleep 10

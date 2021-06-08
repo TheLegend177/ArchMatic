@@ -70,7 +70,7 @@ mount -t vfat "${DISK}1" /mnt/boot/
 echo "-------------------------------------------------"
 echo "     Arch Install on Main Drive"
 echo "-------------------------------------------------"
-pacstrap /mnt base base-devel linux linux-firmware nano xdg-user-dirs --noconfirm --needed
+pacstrap /mnt base base-devel linux linux-firmware nano xdg-user-dirs git --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # copy to new script to run in arch-root

@@ -7,6 +7,13 @@ ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
 sed -i 's/^#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
+echo "LANG=de_DE.UTF-8" >> /etc/locale.conf
+
+cat <<EOF >> /etc/vconsole.conf
+KEYMAP=de-latin1
+FONT=eurlatgr
+EOF
+
 timedatectl --no-ask-password set-timezone Europe/Berlin
 timedatectl --no-ask-password set-ntp 1
 localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LC_COLLATE="de_DE.UTF-8" LC_TIME="de_DE.UTF-8"
@@ -56,5 +63,6 @@ read -p "Please enter username:" username
 
 useradd -m -G wheel -s /bin/bash $username
 passwd $username
+echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 exit

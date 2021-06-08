@@ -290,7 +290,7 @@ fi' > ${HOME}/.xinitrc
     echo "     Cloning awesome configuration"
     echo "-------------------------------------------------"
     
-    if [ ! -d ".config" ]
+    if [ ! -d "${HOME}/.config" ]; then
         mkdir .config
     fi
     cd .config

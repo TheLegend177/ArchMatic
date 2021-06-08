@@ -25,87 +25,6 @@ if [ "${os}" != "Arch Linux" ]; then
     exit 1
 fi
 
-function setup {
-    # if [ ! -f install.conf ]; then
-    #     read -p "Please enter hostname:" hostname
-    #     read -p "Please enter username:" username
-    #     read -sp "Please enter password:" password
-    #     read -sp "Please repeat password:" password2
-
-    #     # Check if both passwords match
-    #     if [ "$password" != "$password2" ]; then
-    #         echo "Passwords do not match"
-    #         exit 1
-    #     fi
-    #     printf "hostname=$hostname\nusername=${username}\npassword=${password}" > "install.conf"
-    # else
-    #     source install.conf
-    # fi
-
-    # if ! source install.conf; then
-    #     read -p "Please enter hostname:" hostname
-    #     read -p "Please enter username:" username
-    #     read -sp "Please enter password:" password
-    #     read -sp "Please repeat password:" password2
-
-    #     # Check if both passwords match
-    #     if [ "$password" != "$password2" ]; then
-    #         echo "Passwords do not match"
-    #         exit 1
-    #     fi
-    #     printf "hostname=$hostname\nusername=${username}\npassword=${password}" > "install.conf"
-    # fi
-
-    echo "-------------------------------------------------"
-    echo "     Setting up mirrors for optimal download"
-    echo "-------------------------------------------------"
-    sudo pacman -S --noconfirm pacman-contrib reflector
-    if [ -f /etc/pacman.d/mirrorlist ]; then
-        mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    fi
-    reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-
-    echo "-------------------------------------------------"
-    echo "     makepkg configuration"
-    echo "-------------------------------------------------"
-    nc=$(grep -c ^processor /proc/cpuinfo)
-    echo "You have "$nc" cores."
-    echo "-------------------------------------------------"
-    echo "Changing the makeflags for "$nc" cores."
-    sudo sed -i 's/#MAKEFLAGS="-j2"/MAKEFLAGS="-j$nc"/g' /etc/makepkg.conf
-    echo "Changing the compression settings for "$nc" cores."
-    sudo sed -i 's/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g' /etc/makepkg.conf
-
-    echo "-------------------------------------------------"
-    echo "     Setup Language to DE and set locale"
-    echo "-------------------------------------------------"
-    sed -i 's/^#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
-    locale-gen
-    timedatectl --no-ask-password set-timezone Europe/Berlin
-    timedatectl --no-ask-password set-ntp 1
-    localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LC_COLLATE="de_DE.UTF-8" LC_TIME="de_DE.UTF-8"
-
-    # Set keymaps
-    localectl --no-ask-password set-keymap de
-
-    # Hostname
-    hostnamectl --no-ask-password set-hostname $hostname
-
-    # Create User
-    # echo "-------------------------------------------------"
-    # echo "     Create User"
-    # echo "-------------------------------------------------"
-    # pw = $(perl -e 'print crypt($ARGV[0], "password")' $password)
-    # useradd -m -p $pw $username
-    # usermod --append --groups wheel $username
-
-    # Add sudo no password rights
-    sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
-
-    # Switch context to User
-    su $username
-}
-
 function baseSetup {
     PKGS=(
 
@@ -371,6 +290,9 @@ fi' > ${HOME}/.xinitrc
     echo "     Cloning awesome configuration"
     echo "-------------------------------------------------"
     
+    if [ ! -d ".config" ]
+        mkdir .config
+    fi
     cd .config
     git clone https://github.com/gramms/awesome.git
     cd ~
@@ -404,7 +326,7 @@ fi' > ${HOME}/.xinitrc
     echo "-------------------------------------------------"
 
     printf 'KEYMAP=de
-FONT=ter-v32b' > /etc/vconsole.conf
+#FONT=ter-v32b' > /etc/vconsole.conf
 
     # ------------------------------------------------------------------------
 
@@ -468,9 +390,9 @@ FONT=ter-v32b' > /etc/vconsole.conf
     sudo ntpd -qg && sudo systemctl enable --now ntpd && sudo systemctl disable dhcpcd && sudo systemctl stop dhcpcd && sudo systemctl enable --now NetworkManager
 
     # Remove no password sudo rights
-    sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/# %wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+    #sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/# %wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
     # Add sudo rights
-    sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+    #sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
     # Clean orphans pkg
     if [[ ! -n $(pacman -Qdt) ]]; then
@@ -484,10 +406,6 @@ FONT=ter-v32b' > /etc/vconsole.conf
 }
 
 clear
-echo -n "Starting setup ... "
-sleep 5
-clear
-setup
 echo -n "Starting base setup ... "
 sleep 5
 clear

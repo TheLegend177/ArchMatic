@@ -50,6 +50,17 @@ pacman -S networkmanager dhclient --noconfirm --needed
 systemctl enable --now NetworkManager
 
 echo "-------------------------------------------------"
+echo "     makepkg configuration"
+echo "-------------------------------------------------"
+nc=$(grep -c ^processor /proc/cpuinfo)
+echo "You have "$nc" cores."
+echo "-------------------------------------------------"
+echo "Changing the makeflags for "$nc" cores."
+sed -i 's/#MAKEFLAGS="-j2"/MAKEFLAGS="-j$nc"/g' /etc/makepkg.conf
+echo "Changing the compression settings for "$nc" cores."
+sed -i 's/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g' /etc/makepkg.conf
+
+echo "-------------------------------------------------"
 echo "     Set Password for Root"
 echo "-------------------------------------------------"
 echo "Enter password for root user: "
@@ -63,6 +74,7 @@ read -p "Please enter username:" username
 
 useradd -m -G wheel -s /bin/bash $username
 passwd $username
-echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+xdg-user-dirs-update
 
 exit

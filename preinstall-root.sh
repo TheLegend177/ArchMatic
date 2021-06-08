@@ -7,7 +7,7 @@ cat <<EOF > /boot/loader/entries/arch.conf
 title Arch Linux  
 linux /vmlinuz-linux  
 initrd  /initramfs-linux.img  
-options root=%s2 rw
+options root=$1 rw
 EOF
 
 echo "-------------------------------------------------"
@@ -39,6 +39,8 @@ echo "     Select a hostname for this machine"
 echo "-------------------------------------------------"
 read -p "Please enter hostname:" hostname
 
+echo $hostname >> /etc/hostname
+
 echo "-------------------------------------------------"
 echo "     Create User"
 echo "-------------------------------------------------"
@@ -46,8 +48,6 @@ read -p "Please enter username:" username
 
 useradd -m -G wheel -s /bin/bash $username
 passwd $username
-
-#usermod --append --groups wheel $username
 
 exit
 umount -R /mnt

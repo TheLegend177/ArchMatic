@@ -79,6 +79,6 @@ chmod a+x /mnt/preinstall-root.sh
 echo "-------------------------------------------------"
 echo "     Switching root"
 echo "-------------------------------------------------"
-arch-chroot /mnt ./preinstall-root.sh
-
 sleep 10
+arch-chroot /mnt ./preinstall-root.sh ${DISK}2
+

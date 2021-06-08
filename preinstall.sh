@@ -23,6 +23,9 @@ echo "     Installing prereqs"
 echo "-------------------------------------------------"
 pacman -S --noconfirm gptfdisk btrfs-progs
 
+
+
+
 echo "-------------------------------------------------"
 echo "     Select your disk to format"
 echo "-------------------------------------------------"

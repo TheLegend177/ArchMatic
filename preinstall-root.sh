@@ -1,4 +1,35 @@
 #!/usr/bin/env bash
+
+
+echo "-------------------------------------------------"
+echo "     Set time zone"
+echo "-------------------------------------------------"
+ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+hwclock --systohc
+
+echo "-------------------------------------------------"
+echo "     Setup Language to DE and set locale"
+echo "-------------------------------------------------"
+sed -i 's/^#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen
+timedatectl --no-ask-password set-timezone Europe/Berlin
+timedatectl --no-ask-password set-ntp 1
+localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LC_COLLATE="de_DE.UTF-8" LC_TIME="de_DE.UTF-8"
+localectl --no-ask-password set-keymap de
+
+echo "-------------------------------------------------"
+echo "     Select a hostname for this machine"
+echo "-------------------------------------------------"
+read -p "Please enter hostname:" hostname
+
+echo $hostname >> /etc/hostname
+
+cat <<EOF >> /etc/hosts
+127.0.0.1       localhost
+::1             localhost
+127.0.0.1       $hostname.local     $hostname
+EOF
+
 echo "-------------------------------------------------"
 echo "     Bootloader Systemd Installation"
 echo "-------------------------------------------------"
@@ -20,26 +51,8 @@ echo "-------------------------------------------------"
 echo "     Set Password for Root"
 echo "-------------------------------------------------"
 echo "Enter password for root user: "
-passwd root
+passwd
 
-echo "-------------------------------------------------"
-echo "     Setup Language to DE and set locale"
-echo "-------------------------------------------------"
-sed -i 's/^#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
-locale-gen
-timedatectl --no-ask-password set-timezone Europe/Berlin
-timedatectl --no-ask-password set-ntp 1
-localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LC_COLLATE="de_DE.UTF-8" LC_TIME="de_DE.UTF-8"
-
-# Set keymaps
-localectl --no-ask-password set-keymap de
-
-echo "-------------------------------------------------"
-echo "     Select a hostname for this machine"
-echo "-------------------------------------------------"
-read -p "Please enter hostname:" hostname
-
-echo $hostname >> /etc/hostname
 
 echo "-------------------------------------------------"
 echo "     Create User"
@@ -50,8 +63,3 @@ useradd -m -G wheel -s /bin/bash $username
 passwd $username
 
 exit
-umount -R /mnt
-
-echo "-------------------------------------------------"
-echo "     SYSTEM READY FOR FIRST BOOT"
-echo "-------------------------------------------------"

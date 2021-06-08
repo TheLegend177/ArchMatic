@@ -13,9 +13,8 @@ echo "-------------------------------------------------"
 timedatectl set-ntp true
 pacman -S --noconfirm pacman-contrib reflector
 if [ -f /etc/pacman.d/mirrorlist ]; then
-        mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    fi
-#curl -s "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
+    mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+fi
 reflector --country Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
 
@@ -39,7 +38,7 @@ sgdisk -Z ${DISK}                   # zap all on disk
 sgdisk -a 2048 -o ${DISK}           # new gpt disk 2048 alignment
 
 # create partitions
-sgdisk -n 1:0:+1000M ${DISK}        # partition 1 (UEFI SYS), default start block, 512MB
+sgdisk -n 1:0:+512M ${DISK}        # partition 1 (UEFI SYS), default start block, 512MB
 sgdisk -n 2:0:0 ${DISK}             # partition 2 (Root), default start, remaining
 
 # set partition types
@@ -47,7 +46,7 @@ sgdisk -t 1:ef00 ${DISK}
 sgdisk -t 2:8300 ${DISK}
 
 # label partitions
-sgdisk -c 1:"UEFISYS" ${DISK}
+sgdisk -c 1:"UEFI" ${DISK}
 sgdisk -c 2:"ROOT" ${DISK}
 
 # make filesystems
@@ -55,25 +54,24 @@ echo "-------------------------------------------------"
 echo "     Creating Filesystems"
 echo "-------------------------------------------------"
 
-mkfs.fat -F32 -n "UEFISYS" "${DISK}1"
+mkfs.fat -F32 -n "UEFI" "${DISK}1"
 mkfs.ext4 -L "ROOT" "${DISK}2"
 
 # mount target
 mkdir /mnt
 mount -t ext4 "${DISK}2" /mnt
 mkdir /mnt/boot
-mkdir /mnt/boot/efi
+#mkdir /mnt/boot/efi
 mount -t vfat "${DISK}1" /mnt/boot/
 
 echo "-------------------------------------------------"
 echo "     Arch Install on Main Drive"
 echo "-------------------------------------------------"
-pacstrap /mnt base base-devel linux linux-firmware vim nano sudo perl --noconfirm --needed
+pacstrap /mnt base base-devel linux linux-firmware nano --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # copy to new script to run in arch-root
 cp preinstall-root.sh /mnt/preinstall-root.sh
-
 chmod a+x /mnt/preinstall-root.sh
 
 echo "-------------------------------------------------"
@@ -82,3 +80,8 @@ echo "-------------------------------------------------"
 sleep 10
 arch-chroot /mnt ./preinstall-root.sh ${DISK}2
 
+umount -R /mnt
+
+echo "-------------------------------------------------"
+echo "     SYSTEM READY FOR FIRST BOOT"
+echo "-------------------------------------------------"

@@ -16,7 +16,8 @@ if [ ! -f /usr/bin/pacman ]; then
     echo "Pacman Package Manager was not found in this system, execution aborted."
     exit
     else
-        pacman -Sy && sudo pacman -Syyy && pacman -S lsb-release --noconfirm --needed &>/dev/null
+        sudo pacman -Syy
+        sudo pacman -S lsb-release --noconfirm --needed &>/dev/null
         os=$(lsb_release -ds | sed 's/"//g')
 fi
 
@@ -48,8 +49,7 @@ function baseSetup {
             'lxappearance'          # Set System Themes
 
         # --- Login Display Manager
-            'lightdm'                   # Base Login Manager
-            'lightdm-webkit2-greeter'   # Framework for Awesome Login Themes
+            'sddm'                  # Base Login Manager
 
         # --- Networking Setup
             'wpa_supplicant'            # Key negotiation for WPA wireless networks
@@ -166,7 +166,6 @@ function softwareSetup {
         'cmake'                 # Cross-platform open-source make system
         'code'                  # Visual Studio Code
         'electron'              # Cross-platform development using Javascript
-        'git'                   # Version control system
         'gcc'                   # C/C++ compiler
         'glibc'                 # C libraries
         'meld'                  # File/directory comparison
@@ -193,7 +192,7 @@ function softwareSetup {
         # PRODUCTIVITY --------------------------------------------------------
 
         'hunspell'              # Spellcheck libraries
-        'hunspell-en'           # English spellcheck library
+        'hunspell-de'           # English spellcheck library
         'xpdf'                  # PDF viewer
 
     )
@@ -204,13 +203,12 @@ function softwareSetup {
 
         'i3lock-fancy'              # Screen locker
         'synology-drive'            # Synology Drive
-        'onlyoffice'                # Office Suite
+        'libreoffice'               # Office Suite
         
         # MEDIA ---------------------------------------------------------------
 
         'screenkey'                 # Screencast your keypresses
         'lbry-app-bin'              # LBRY Linux Application
-        'feh'                       # Wallpaper changer
 
         # COMMUNICATIONS ------------------------------------------------------
 
@@ -219,7 +217,6 @@ function softwareSetup {
 
         # THEMES --------------------------------------------------------------
 
-        'lightdm-webkit-theme-aether'   # Lightdm Login Theme - https://github.com/NoiSek/Aether#installation
         'materia-gtk-theme'             # Desktop Theme
         'papirus-icon-theme'            # Desktop Icons
         'capitaine-cursors'             # Cursor Themes
@@ -274,7 +271,7 @@ xsetroot -solid darkgrey
 #xrdb -merge $HOME/.Xresources
 
 # Caps to Ctrl, no caps
-setxkbmap -layout us -option ctrl:nocaps
+setxkbmap -layout de -option ctrl:nocaps
 if [ -d /etc/X11/xinit/xinitrc.d ] ; then
     for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
         [ -x "\$f" ] && . "\$f"
@@ -386,7 +383,11 @@ fi' > ${HOME}/.xinitrc
     echo "-------------------------------------------------"
     echo "     Configuring NTP, DHCP and NetworkManager"
     echo "-------------------------------------------------"
-    sudo ntpd -qg && sudo systemctl enable --now ntpd && sudo systemctl disable dhcpcd && sudo systemctl stop dhcpcd && sudo systemctl enable --now NetworkManager
+    sudo ntpd -qg
+    sudo systemctl enable --now ntpd
+    sudo systemctl disable dhcpcd
+    sudo systemctl stop dhcpcd
+    sudo systemctl enable --now NetworkManager
 
     # Remove no password sudo rights
     #sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/# %wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers

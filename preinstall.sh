@@ -81,7 +81,7 @@ echo "-------------------------------------------------"
 echo "     Switching root"
 echo "-------------------------------------------------"
 sleep 10
-arch-chroot /mnt ./preinstall-root.sh ${DISK}2
+arch-chroot /mnt ./preinstall-root.sh
 
 umount -R /mnt
 

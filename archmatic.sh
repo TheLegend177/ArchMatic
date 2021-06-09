@@ -88,9 +88,7 @@ function baseSetup {
         echo "     Installing package "$PKG
         echo "-------------------------------------------------"
         sudo pacman -S "$PKG" --noconfirm --needed
-        echo "-------------------------------------------------"
-        echo "     Installation of package "$PKG" done."
-        echo "-------------------------------------------------"
+        clear
     done
 }
 
@@ -161,7 +159,7 @@ function softwareSetup {
 
         # DEVELOPMENT ---------------------------------------------------------
 
-        'gedit'                 # Text editor
+        'kate'                  # Text editor
         'clang'                 # C Lang compiler
         'cmake'                 # Cross-platform open-source make system
         'code'                  # Visual Studio Code
@@ -228,9 +226,7 @@ function softwareSetup {
         echo "     Installing package "$PAC
         echo "-------------------------------------------------"
         sudo pacman -S "$PAC" --noconfirm --needed
-        echo "-------------------------------------------------"
-        echo "     Installation of package "$PAC" done."
-        echo "-------------------------------------------------"
+        clear
     done
 
     # Clone yay repository and install it
@@ -240,16 +236,15 @@ function softwareSetup {
     cd ${HOME}
     git clone "https://aur.archlinux.org/yay.git"
     cd ${HOME}/yay
-    makepkg -si
+    makepkg -si --noconfirm --needed
+    clear
 
     for AUR in "${AURPKGS[@]}"; do
         echo "-------------------------------------------------"
         echo "     Installing package "$AUR
         echo "-------------------------------------------------"
         sudo pacman -S "$AUR" --noconfirm --needed
-        echo "-------------------------------------------------"
-        echo "     Installation of package "$AUR" done."
-        echo "-------------------------------------------------"
+        clear
     done
 }
 
@@ -317,14 +312,23 @@ fi' > ${HOME}/.xinitrc
     # ------------------------------------------------------------------------
 
     echo "-------------------------------------------------"
-    echo "     Configuring vconsole.conf to set a"
-    echo "     larger font for login shell"
+    echo "     Configure X11 keyboard layout"
     echo "-------------------------------------------------"
 
-    printf 'KEYMAP=de
-#FONT=ter-v32b' > /etc/vconsole.conf
+    localectl --no-ask-password set-x11-keymap de pc105 deadgraveacute
 
-    # ------------------------------------------------------------------------
+    echo "setxkbmap -layout de" >> /usr/share/sddm/scripts/Xsetup
+
+    if [ ! -f "/etc/X11/xorg.conf.d/00-keyboard.conf" ]; then
+        cat <<EOF >> /etc/X11/xorg.conf.d/00-keyboard.conf
+Section "InputClass"
+        Identifier "system-keyboard"
+        MatchIsKeyboard "on"
+        Option "XkbLayout" "de"
+        Option "XkbVariant" "deadgraveacute"
+EndSection
+EOF
+    fi
 
     echo "-------------------------------------------------"
     echo "     Disabling buggy cursor inheritance"
@@ -359,7 +363,7 @@ fi' > ${HOME}/.xinitrc
     echo "     Enabling Login Display Manager"
     echo "-------------------------------------------------"
 
-    sudo systemctl enable --now lightdm
+    sudo systemctl enable --now sddm.service
 
     # ------------------------------------------------------------------------
 

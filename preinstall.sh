@@ -78,9 +78,9 @@ cp preinstall-root.sh /mnt/preinstall-root.sh
 chmod a+x /mnt/preinstall-root.sh
 
 echo "-------------------------------------------------"
-echo "     Switching root"
+echo "     arch-chroot into new installation"
 echo "-------------------------------------------------"
-sleep 10
+sleep 5
 arch-chroot /mnt ./preinstall-root.sh
 
 umount -R /mnt

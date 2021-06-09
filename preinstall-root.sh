@@ -16,8 +16,9 @@ EOF
 
 timedatectl --no-ask-password set-timezone Europe/Berlin
 timedatectl --no-ask-password set-ntp 1
-localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LC_COLLATE="de_DE.UTF-8" LC_TIME="de_DE.UTF-8"
-localectl --no-ask-password set-keymap de
+localectl --no-ask-password set-locale LANG="de_DE.UTF-8" LANGUAGE="de_DE.UTF-8" LC_MESSAGES="de_DE.UTF-8" LC_TIME="de_DE.UTF-8"
+localectl --no-ask-password set-keymap de-latin1-nodeadkeys
+
 
 echo "-------------------------------------------------"
 echo "     Select a hostname for this machine"
